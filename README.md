@@ -1,4 +1,4 @@
-# 🏛️ Comienza tu Carrera con PantheonX
+# 🏛️ Comienza tu Carrera con PantheonX (Para Kali Linux)
 
 ![PantheonX-1-4-2025](https://github.com/user-attachments/assets/aad3f954-5a54-46c7-95ef-8152f6f2ab77)
 
