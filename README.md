@@ -10,8 +10,8 @@
 #### ⭐ Actualizacion completa del sistema + Limpieza Automatica
 #### ⭐ Correciones de Errores del sistema
 #### ⭐ Optimizar Diccionarios de la SecLists quitando los comentarios
-#### ⭐ Descargar +120 herramientas de Pentesting en APT/GitHub/Personales
-#### ⭐ Descargar de manera Automatizada un Entorno Profesional Hacking (Proxima Actualizacion)
+#### ⭐ Descargar +140 herramientas de Pentesting en APT/GitHub/Personales
+#### ⭐ Descargar de manera Automatizada un Entorno Profesional Hacking
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
