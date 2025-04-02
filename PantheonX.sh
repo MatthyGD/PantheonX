@@ -263,19 +263,20 @@ show_installation_summary() {
     echo -e "  • Assetfinder, SIPPTs, Dirsearch, ADB, Foremost"
     echo -e "  • Certbot, enum4linux-ng, Tor, Ghidra, CrackMapExec"
     echo -e "  • Padbuster, InfluxDB Client, libnet-ident-perl"
-    echo -e "  • Erlang, HTTPie, LFTP, Docker Compose\033[0m"
+    echo -e "  • Erlang, HTTPie, LFTP, Docker Compose, CUPP, GDB"
+    echo -e "  • gccgo-go, golang-go\033[0m"
 
     echo -e "\033[1;34m\n[+] Additional applications:\033[0m"
     echo -e "\033[1;36m  • Sonic Visualiser, Google Chrome, LibreOffice, Obsidian\033[0m"
 
     echo -e "\033[1;34m\n[+] Go tools:\033[0m"
-    echo -e "\033[1;36m  • Subfinder, gau, waybackurls\033[0m"
+    echo -e "\033[1;36m  • Subfinder, gau, waybackurls, katana\033[0m"
 
     echo -e "\033[1;34m\n[+] Python/Ruby/NPM tools:\033[0m"
     echo -e "\033[1;36m  • Slowloris, StegoVeritas, lolcat, git-dumper, cewler"
     echo -e "  • haiti-hash, fpm, js-beautify\033[0m"
 
-    echo -e "\n\033[1;33mThis script will install approximately 60 security and productivity tools.\033[0m"
+    echo -e "\n\033[1;33mThis script will install approximately 63 security and productivity tools.\033[0m"
     echo -e "\033[1;33mThe installation may take some time depending on your internet connection.\033[0m"
     
     read -p $'\033[1;35m[?] Do you want to continue with the installation? [y/N]: \033[0m' -n 1 -r
@@ -369,6 +370,10 @@ main_installation() {
         "HTTPie|httpie"
         "LFTP|lftp"
         "Docker Compose|docker-compose"
+        "CUPP|cupp"
+        "GDB|gdb"
+        "gccgo-go|gccgo-go"
+        "golang-go|golang-go"
     )
 
     # Update package list first
@@ -529,11 +534,13 @@ main_installation() {
     # Configure Go environment
     export GOPATH=${GOPATH:-$HOME/go}
     export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+    export GO_ENABLED=1
 
     go_tools=(
         "Subfinder|github.com/projectdiscovery/subfinder/v2/cmd/subfinder|subfinder"
         "gau|github.com/lc/gau/v2/cmd/gau|gau"
         "waybackurls|github.com/tomnomnom/waybackurls|waybackurls"
+        "Katana|github.com/projectdiscovery/katana/cmd/katana|katana"
     )
 
     for tool in "${go_tools[@]}"; do
@@ -636,6 +643,7 @@ main_installation() {
         "subfinder|subfinder"
         "gau|gau"
         "waybackurls|waybackurls"
+        "katana|katana"
         "slowloris|slowloris"
         "StegoVeritas|stegoveritas"
         "lolcat|lolcat"
@@ -673,6 +681,10 @@ main_installation() {
         "Obsidian|obsidian"
         "Google Chrome|google-chrome"
         "LibreOffice|libreoffice"
+        "CUPP|cupp"
+        "GDB|gdb"
+        "gccgo-go|go"
+        "golang-go|go"
     )
 
     for tool in "${tools_to_verify[@]}"; do
@@ -739,7 +751,6 @@ github_tools=(
     "imagemagick-lfi-poc|https://github.com/Sybil-Scan/imagemagick-lfi-poc.git"
     "mitm6|https://github.com/dirkjanm/mitm6.git"
     "php_filter_chain_generator|https://github.com/synacktiv/php_filter_chain_generator.git"
-    "cupp|https://github.com/Mebus/cupp.git"
     "wordlistctl|https://github.com/BlackArch/wordlistctl.git"
     "finger-user-enum|https://github.com/pentestmonkey/finger-user-enum.git"
     "chankro-py3|https://github.com/kriss-u/chankro-py3.git"
@@ -757,6 +768,8 @@ github_tools=(
     "ten|https://github.com/cfreal/ten.git"
     "nuclei-templates|https://github.com/coffinxp/nuclei-templates"
     "KnockIt|https://github.com/eliemoutran/KnockIt.git"
+    "evil-cups|https://github.com/IppSec/evil-cups.git"
+    "PwnKit|https://github.com/ly4k/PwnKit.git"
 )
 
 # Improved repository cloning function
@@ -796,10 +809,10 @@ show_github_summary() {
     # Additional tools
     echo -e "\n=== Additional Tools ==="
     echo -e "• Postman"
-    echo -e "• gdb + peda"
     echo -e "• Rust (update)"
     echo -e "• The_spy_job"
     echo -e "• python-evtx"
+    echo -e "• PEDA (GDB enhancement)"
     
     echo -e "\033[0m"
 }
@@ -810,7 +823,7 @@ github_installation() {
     show_github_summary
     
     # Ask for confirmation
-    echo -e "\n\033[1;33mThis script will install approximately 30 security and productivity tools.\033[0m"
+    echo -e "\n\033[1;33mThis script will install approximately 33 security and productivity tools.\033[0m"
     echo -e "\033[1;33mThe installation may take some time depending on your internet connection.\033[0m"
     
     read -p $'\033[1;35m[?] Do you want to continue with the installation? [y/N]: \033[0m' -n 1 -r
@@ -862,29 +875,6 @@ github_installation() {
 
     # Additional tools installation
     echo -e "\n\033[1;34m[+] Installing additional tools...\033[0m"
-    sleep 1
-
-    # Install gdb and peda
-    echo -e "\n\033[1;34m[+] Installing gdb and peda...\033[0m"
-    sleep 1
-    
-    if [ ! -d "$HOME/peda" ]; then
-        echo -e "\033[1;36m[*] Installing gdb...\033[0m"
-        if apt install -y gdb >/dev/null 2>&1; then
-            echo -e "\033[1;32m[✓] gdb successfully installed!\033[0m"
-            echo -e "\033[1;36m[*] Installing peda...\033[0m"
-            if git clone https://github.com/longld/peda.git ~/peda >/dev/null 2>&1 && \
-               echo "source ~/peda/peda.py" >> ~/.gdbinit; then
-                echo -e "\033[1;32m[✓] peda successfully installed!\033[0m"
-            else
-                echo -e "\033[1;31m[✗] Error installing peda\033[0m"
-            fi
-        else
-            echo -e "\033[1;31m[✗] Error installing gdb\033[0m"
-        fi
-    else
-        echo -e "\033[1;33m[!] peda already installed - skipping\033[0m"
-    fi
     sleep 1
 
     # Install/Update Rust
@@ -951,39 +941,62 @@ github_installation() {
     fi
     sleep 1
 
+    # Install PEDA (GDB enhancement)
+    echo -e "\n\033[1;34m[+] Installing PEDA (GDB enhancement)...\033[0m"
+    sleep 1
+    
+    if [ ! -d "$HOME/gdb-peda-pwndbg-gef" ]; then
+        echo -e "\033[1;36m[*] Cloning PEDA...\033[0m"
+        if git clone https://github.com/apogiatzis/gdb-peda-pwndbg-gef.git "$HOME/gdb-peda-pwndbg-gef" >/dev/null 2>&1; then
+            echo -e "\033[1;36m[*] Installing PEDA...\033[0m"
+            if cd "$HOME/gdb-peda-pwndbg-gef" && ./install.sh >/dev/null 2>&1; then
+                echo -e "\033[1;32m[✓] PEDA successfully installed!\033[0m"
+                echo 'source ~/.gdbinit' >> ~/.bashrc
+            else
+                echo -e "\033[1;31m[✗] Error installing PEDA\033[0m"
+            fi
+        else
+            echo -e "\033[1;31m[✗] Error cloning PEDA\033[0m"
+        fi
+    else
+        echo -e "\033[1;33m[!] PEDA already exists - skipping\033[0m"
+    fi
+    sleep 1
+
     # === VERIFICATION ===
     echo -e "\n\033[1;34m[+] Verifying installations...\033[0m"
     sleep 1
 
     failed=0
     tools_to_verify=(
-        "peda|$HOME/peda"
         "Rust|$HOME/.cargo/bin/rustc"
         "keepass-password-dumper|/opt/keepass-password-dumper"
-	    "ldapdomaindump|/opt/ldapdomaindump"
-	    "firefox_decrypt|/opt/firefox_decrypt"
-	    "Gopherus|/opt/Gopherus"
-	    "imagemagick-lfi-poc|/opt/imagemagick-lfi-poc"
-	    "mitm6|/opt/mitm6"
-	    "php_filter_chain_generator|/opt/php_filter_chain_generator"
-	    "cupp|/opt/cupp"
-	    "wordlistctl|/opt/wordlistctl"
-	    "finger-user-enum|/opt/finger-user-enum"
-	    "chankro-py3|/opt/chankro-py3"
-	    "HiddenWave|/opt/HiddenWave"
-	    "ping-sweep|/opt/ping-sweep"
-	    "ident-user-enum|/opt/ident-user-enum"
-	    "username-anarchy|/opt/username-anarchy"
-	    "searchbins|/opt/searchbins"
-	    "DetectDee|/opt/DetectDee"
-	    "droopescan|/opt/droopescan"
-	    "magescan|/opt/magescan"
-	    "firepwd|/opt/firepwd"
-	    "Argus|/opt/Argus"
-	    "wrapwrap|/opt/wrapwrap"
-	    "ten|/opt/ten"
-	    "nuclei-templates|/opt/nuclei-templates"
-	    "KnockIt|/opt/KnockIt"
+        "ldapdomaindump|/opt/ldapdomaindump"
+        "firefox_decrypt|/opt/firefox_decrypt"
+        "Gopherus|/opt/Gopherus"
+        "imagemagick-lfi-poc|/opt/imagemagick-lfi-poc"
+        "mitm6|/opt/mitm6"
+        "php_filter_chain_generator|/opt/php_filter_chain_generator"
+        "wordlistctl|/opt/wordlistctl"
+        "finger-user-enum|/opt/finger-user-enum"
+        "chankro-py3|/opt/chankro-py3"
+        "HiddenWave|/opt/HiddenWave"
+        "ping-sweep|/opt/ping-sweep"
+        "ident-user-enum|/opt/ident-user-enum"
+        "username-anarchy|/opt/username-anarchy"
+        "searchbins|/opt/searchbins"
+        "DetectDee|/opt/DetectDee"
+        "droopescan|/opt/droopescan"
+        "magescan|/opt/magescan"
+        "firepwd|/opt/firepwd"
+        "Argus|/opt/Argus"
+        "wrapwrap|/opt/wrapwrap"
+        "ten|/opt/ten"
+        "nuclei-templates|/opt/nuclei-templates"
+        "KnockIt|/opt/KnockIt"
+        "evil-cups|/opt/evil-cups"
+        "PwnKit|/opt/PwnKit"
+        "PEDA|$HOME/.gdbinit"
     )
 
     for tool in "${tools_to_verify[@]}"; do
@@ -1002,14 +1015,6 @@ github_installation() {
         echo -e "\033[1;32m[✓] Postman successfully installed\033[0m"
     else
         echo -e "\033[1;31m[✗] Postman is MISSING\033[0m"
-        ((failed++))
-    fi
-
-    # Verify peda
-    if [ -f "$HOME/peda/peda.py" ]; then
-        echo -e "\033[1;32m[✓] peda successfully installed\033[0m"
-    else
-        echo -e "\033[1;31m[✗] peda is MISSING\033[0m"
         ((failed++))
     fi
 
@@ -1052,17 +1057,18 @@ show_tools_summary() {
     echo -e "\033[1;34m\n[+] Linux Tools:\033[0m"
     echo -e "\033[1;36m• linux-exploit-suggester • linpeas • linux-smart-enumeration"
     echo -e "• pspy64 • suid3num • chisel • fscan • static nmap"
-    echo -e "• lazyegg • static socat\033[0m"
+    echo -e "• lazyegg • static socat • suForce • ligolo-ng\033[0m"
     
     echo -e "\033[1;34m\n[+] Windows Tools:\033[0m"
     echo -e "\033[1;36m• Rubeus • rpcenum • kerbrute • winPEASx86/64 • PrintSpoofer"
-    echo -e "• SweetPotato • nc.exe/nc64.exe • RunasCs • GodPotato • Invoke-PowerShellTcp\033[0m"
+    echo -e "• SweetPotato • nc.exe/nc64.exe • RunasCs • GodPotato • Invoke-PowerShellTcp"
+    echo -e "• JuicyPotato • ligolo-ng\033[0m"
     
     echo -e "\033[1;34m\n[+] MatthyGD Personal Tools:\033[0m"
-    echo -e "\033[1;36m• NDiscover • PathTrace • BruteX • RsyncForce\033[0m"
+    echo -e "\033[1;36m• NDiscover • PathTrace • BruteX • RsyncForce • PantheonX\033[0m"
     
-        # Ask for confirmation
-    echo -e "\n\033[1;33mThis script will install approximately 30 security and productivity tools.\033[0m"
+    # Ask for confirmation
+    echo -e "\n\033[1;33mThis script will install approximately 35 security and productivity tools.\033[0m"
     echo -e "\033[1;33mThe installation may take some time depending on your internet connection.\033[0m"
     
     read -p $'\033[1;35m[?] Do you want to continue with the installation? [y/N]: \033[0m' -n 1 -r
@@ -1142,6 +1148,9 @@ install_tools() {
         "static nmap|https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/nmap|nmap_static"
         "lazyegg|https://github.com/schooldropout1337/nuclei-templates/raw/main/lazyegg.py|lazyegg.py"
         "static socat|https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat|socat"
+        "suForce|https://raw.githubusercontent.com/VulNyx/Arsenal/refs/heads/main/suForce/suForce|suForce"
+        "techyou.txt|https://raw.githubusercontent.com/VulNyx/Arsenal/refs/heads/main/suForce/techyou.txt|techyou.txt"
+        "top12000.txt|https://raw.githubusercontent.com/VulNyx/Arsenal/refs/heads/main/suForce/top12000.txt|top12000.txt"
     )
 
     for tool in "${linux_tools[@]}"; do
@@ -1166,6 +1175,7 @@ install_tools() {
         "RunasCs|https://github.com/antonioCoco/RunasCs/releases/download/v1.4/RunasCs.zip|RunasCs.zip"
         "GodPotato|https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe|GodPotato-NET4.exe"
         "Invoke-PowerShellTcp|https://github.com/samratashok/nishang/raw/master/Shells/Invoke-PowerShellTcp.ps1|Invoke-PowerShellTcp.ps1"
+        "JuicyPotato|https://github.com/ohpe/juicy-potato/releases/download/v0.1/JuicyPotato.exe|JuicyPotato.exe"
     )
 
     for tool in "${windows_tools[@]}"; do
@@ -1173,6 +1183,41 @@ install_tools() {
         download_tool "$name" "$url" "$file" "$tools_path/Windows"
         sleep 0.5
     done
+
+    # ==================== LIGOLO-NG INSTALLATION ====================
+    section_header "=== INSTALLING LIGOLO-NG ==="
+    
+    echo -e "\033[1;36m[*] Installing ligolo-ng...\033[0m"
+    sleep 0.5
+    
+    if [ ! -f "$tools_path/Linux/ligolo_agent" ] || [ ! -f "$tools_path/Linux/ligolo_proxy" ] || 
+       [ ! -f "$tools_path/Windows/ligolo_agent.exe" ] || [ ! -f "$tools_path/Windows/ligolo_proxy.exe" ]; then
+        temp_dir="/tmp/ligolo_temp"
+        
+        if git clone https://github.com/nicocha30/ligolo-ng.git "$temp_dir" >/dev/null 2>&1; then
+            cd "$temp_dir" || return
+            if make >/dev/null 2>&1; then
+                # Move Linux binaries
+                [ -f "dist/ligolo-ng-agent-linux_amd64" ] && mv "dist/ligolo-ng-agent-linux_amd64" "$tools_path/Linux/ligolo_agent"
+                [ -f "dist/ligolo-ng-proxy-linux_amd64" ] && mv "dist/ligolo-ng-proxy-linux_amd64" "$tools_path/Linux/ligolo_proxy"
+                
+                # Move Windows binaries
+                [ -f "dist/ligolo-ng-agent-windows_amd64.exe" ] && mv "dist/ligolo-ng-agent-windows_amd64.exe" "$tools_path/Windows/ligolo_agent.exe"
+                [ -f "dist/ligolo-ng-proxy-windows_amd64.exe" ] && mv "dist/ligolo-ng-proxy-windows_amd64.exe" "$tools_path/Windows/ligolo_proxy.exe"
+                
+                echo -e "\033[1;32m[✓] ligolo-ng installed successfully!\033[0m"
+            else
+                echo -e "\033[1;31m[✗] Error compiling ligolo-ng\033[0m"
+            fi
+            cd - >/dev/null || return
+            rm -rf "$temp_dir"
+        else
+            echo -e "\033[1;31m[✗] Error cloning ligolo-ng repository\033[0m"
+        fi
+    else
+        echo -e "\033[1;33m[!] ligolo-ng already exists - skipping\033[0m"
+    fi
+    sleep 1
 
     # ==================== PERSONAL TOOLS ====================
     section_header "=== INSTALLING MATTHYGD TOOLS ==="
@@ -1211,6 +1256,8 @@ install_tools() {
     install_personal_tool "PathTrace" "https://github.com/MatthyGD/PathTrace.git" "PathTrace.sh"
     install_personal_tool "BruteX" "https://github.com/MatthyGD/BruteX.git" "BruteX.sh"
     install_personal_tool "RsyncForce" "https://github.com/MatthyGD/RsyncForce.git" "RsyncForce.py"
+    install_personal_tool "PantheonX" "https://github.com/MatthyGD/PantheonX.git" "PantheonX.sh"
+    sleep 1
 
     # ==================== FINAL CONFIGURATION ====================
     section_header "=== FINAL CONFIGURATION ==="
@@ -1218,6 +1265,7 @@ install_tools() {
     echo -e "\033[1;36m[*] Setting execution permissions...\033[0m"
     find "$tools_path" -type f -exec chmod +x {} \; 2>/dev/null
     echo -e "\033[1;32m[✓] All files are now executable!\033[0m"
+    sleep 0.5
     
     echo -e "\n\033[1;36m[*] Setting ownership...\033[0m"
     if chown -R "$current_user:$current_user" "$tools_path"; then
@@ -1225,6 +1273,7 @@ install_tools() {
     else
         echo -e "\033[1;31m[✗] Error setting ownership\033[0m"
     fi
+    sleep 0.5
     
     # Verification
     echo -e "\n\033[1;34m[+] Verifying installations...\033[0m"
@@ -1237,6 +1286,7 @@ install_tools() {
             echo -e "\033[1;31m[✗] No $dir tools found!\033[0m"
             ((failed++))
         fi
+        sleep 0.3
     done
     
     if [ $failed -eq 0 ]; then
@@ -1244,58 +1294,111 @@ install_tools() {
     else
         echo -e "\n\033[1;31m[✗] Some tools failed to install ($failed categories)\033[0m"
     fi
+    sleep 1
 }
 
 # Start installation
 install_tools
 
 # ======================================================
+# === UPDATING SYSTEM ===
+# ======================================================
+echo -e "\n\033[1;34m[🔄] Now we'll update your system, please wait...\033[0m\n"
+sleep 2  # Reasonable pause before major operation
+
+# Command execution function
+execute() {
+    local cmd="$1"
+    local description="$2"
+    
+    echo -e "\033[1;36m[ℹ] $description...\033[0m"
+    echo -e "\033[90mCommand: $cmd\033[0m"
+    
+    if eval "sudo $cmd"; then
+        echo -e "\033[1;32m[✓] $description completed\033[0m\n"
+        sleep 1  # Short success pause
+        return 0
+    else
+        echo -e "\033[1;31m[✗] Error in $description\033[0m\n"
+        sleep 1  # Short error pause
+        return 1
+    fi
+}
+
+# 1. Update package lists
+execute "apt update -y" "Updating package lists"
+
+# 2. Upgrade installed packages
+execute "apt upgrade -y --allow-downgrades" "Upgrading packages"
+
+# 3. Smart system upgrade
+execute "apt dist-upgrade -y" "System dist-upgrade"
+
+# 4. Clean residual packages
+execute "apt autoremove -y --purge" "Cleaning unnecessary packages"
+
+# 5. Clean package cache
+execute "apt clean -y" "Cleaning package cache"
+
+# 6. Final check
+echo -e "\033[1;35m[🔍] Verifying results...\033[0m"
+execute "apt list --upgradable" "Remaining upgradable packages"
+sleep 2  # Pause for review
+
+echo -e "\033[1;32m[✔] System successfully updated!\033[0m\n"
+sleep 2  # Completion pause
+
+# ======================================================
 # === BSPWM INSTALLATION ===
 # ======================================================
 
-# Function to show installation summary
-show_installation_summary() {
-    echo -e "\n\033[1;34m[+] The following will be installed:\033[0m"
-    echo -e "\033[1;36m• Neofetch system information tool"
-    echo -e "• BSPWM window manager"
-    echo -e "• SXHKD hotkey daemon"
-    echo -e "• Polybar status bar"
-    echo -e "• Rofi application launcher"
-    echo -e "• Picom compositor"
-    echo -e "• Additional dependencies\033[0m"
-    
-    echo -e "\n\033[1;33mThis will install a complete tiling window manager environment."
-    echo -e "The installation may take several minutes depending on your system.\033[0m"
-    
-    echo -e "\n\033[1;35m[★] Note: BSPWM setup credit to ZLCube ★\033[0m"
-}
+echo -e "\n\033[1;34m[🖥️] BSPWM Installation Section\033[0m"
+sleep 2
 
-# Main installation function
-install_neofetch_and_bspwm() {
-    # Show installation summary
-    show_installation_summary
-    
-    # Ask for confirmation
-    read -p $'\033[1;35m[?] Continue with installation? [y/N]: \033[0m' -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "\033[1;31m[✗] Installation aborted by user.\033[0m"
-        exit 1
-    fi
+echo -e "\n\033[1;33mThis will install BSPWM window manager.\033[0m"
+echo -e "\033[1;33mThe system will automatically reboot after installation.\033[0m"
+echo -e "\033[1;33mEstimated time: 3-5 minutes depending on your internet connection.\033[0m"
 
-    # ====================
-    # Neofetch Installation
-    # ====================
-    echo -e "\n\033[1;34m[+] Installing Neofetch...\033[0m"
-    
-    if ! command -v neofetch >/dev/null; then
-        apt-get update >/dev/null 2>&1 && apt-get install -y neofetch >/dev/null 2>&1
-        
-        if command -v neofetch >/dev/null; then
-            echo -e "\033[1;32m[✓] Neofetch installed successfully!\033[0m"
-        fi
-    fi
-}
+read -p $'\033[1;35m[?] Continue with BSPWM installation? [y/N]: \033[0m' -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "\033[1;31m[✗] BSPWM installation skipped.\033[0m"
+    return 0
+fi
+
+echo -e "\033[1;32m[✔] Starting BSPWM installation process...\033[0m"
+sleep 1.5
+
+# Switch to the selected user for installation
+echo -e "\033[1;34m[→] Switching to user '$current_user' for installation...\033[0m"
+sleep 1
+
+# Clone and install bspwm as the selected user
+sudo -u "$current_user" bash <<EOF
+echo -e "\033[1;36m[↓] Downloading BSPWM configuration package...\033[0m"
+cd /tmp && git clone -q https://github.com/r1vs3c/auto-bspwm.git > /dev/null 2>&1
+
+echo -e "\033[1;36m[⚙] Configuring packages (neofetch → fastfetch replacement)...\033[0m"
+cd auto-bspwm
+sed -i 's/neofetch/fastfetch/g' setup.sh
+
+echo -e "\033[1;36m[🛠] Installing BSPWM components...\033[0m"
+chmod +x setup.sh && ./setup.sh --silent > /dev/null 2>&1
+EOF
+
+# Verify installation
+if [ -d "/home/$current_user/.config/bspwm" ]; then
+    echo -e "\033[1;32m[✔] BSPWM successfully installed for user '$current_user'\033[0m"
+    echo -e "\033[1;33m[⚠] The system will reboot in 10 seconds to complete installation.\033[0m"
+    sleep 10
+    reboot
+else
+    echo -e "\033[1;31m[✗] Error: BSPWM installation may have failed.\033[0m"
+    echo -e "\033[1;33m[ℹ] Please check logs and try manual installation if needed.\033[0m"
+fi
+
+echo -e "\033[1;34m[✓] BSPWM installation process completed.\033[0m\n"
+sleep 1.5
 
 # ======================================================
 # === REBOOT PROMPT ===
