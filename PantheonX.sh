@@ -181,15 +181,20 @@ check_internet_connection
 # ======================================================
 # === FIXING ERRORS ===
 # ======================================================
+echo -e "\033[1;35m[🔍] Fixing system errors for successful installation:\033[0m"
 
 # Python Error
-echo -e "\033[1;35m[🔍] Fixing system errors for successful installation:\033[0m"
 mkdir -p ~/.config/pip
 echo -e "[global]\nindex-url = https://pypi.org/simple\ntrusted-host = pypi.org\nbreak-system-packages = true" > ~/.config/pip/pip.conf
-sleep 3  # Realistic pause for config changes
+
+# GPG Pub Kali Error
+wget https://archive.kali.org/archive-keyring.gpg -O /usr/share/keyrings/kali-archive-keyring.gpg &>/dev/null
+
+# Realistic pause for config changes
+sleep 3  
 
 echo -e "\033[1;32m[✔] Errors fixed!\033[0m\n"
-sleep 1  # Confirmation pause
+sleep 1
 
 # ======================================================
 # === UPDATING SYSTEM ===
@@ -254,29 +259,30 @@ show_installation_summary() {
     section_header "=== TOOLS TO BE INSTALLED ==="
     
     echo -e "\033[1;34m\n[+] Main system tools via APT:\033[0m"
-    echo -e "\033[1;36m  • npm, MongoDB, Putty, kpcli, Nitrogen, Shutter"
-    echo -e "  • Synaptic, xclip, arandr, Timeshift, Poppler-utils"
-    echo -e "  • Stegseek, ltrace, strace, ntpdate, rlwrap, ipcalc"
-    echo -e "  • cargo, snapd, Alien, AWS CLI, Mosquitto, knockd"
-    echo -e "  • dsniff, nuclei, ZAP Proxy, Docker, Feroxbuster"
-    echo -e "  • httpx-toolkit, Gobuster, Ncat, Bettercap, SecLists"
-    echo -e "  • Assetfinder, SIPPTs, Dirsearch, ADB, Foremost"
-    echo -e "  • Certbot, enum4linux-ng, Tor, Ghidra, CrackMapExec"
-    echo -e "  • Padbuster, InfluxDB Client, libnet-ident-perl"
-    echo -e "  • Erlang, HTTPie, LFTP, Docker Compose, CUPP, GDB"
-    echo -e "  • gccgo-go, golang-go\033[0m"
+    echo -e "\033[1;36m  • NPM, MongoDB, Putty, KPcli, Nitrogen, Shutter,"
+    echo -e "  • Synaptic, Xclip, Arandr, Timeshift, Poppler-utils,"
+    echo -e "  • Stegseek, Ltrace, Strace, RLWrap, IPcalc,"
+    echo -e "  • Cargo, Snapd, Alien, AWScli, Mosquitto, Knockd,"
+    echo -e "  • DSniff, Nuclei, ZAP Proxy, Docker, Feroxbuster,"
+    echo -e "  • Httpx-Toolkit, Gobuster, Ncat, Bettercap, SecLists,"
+    echo -e "  • Assetfinder, SIPPTS, Dirsearch, ADB, Foremost,"
+    echo -e "  • Certbot, Enum4Linux-NG, Tor, Ghidra, CrackMapExec,"
+    echo -e "  • Padbuster, InfluxDB Client, Erlang, HTTPie, LFTP,"
+    echo -e "  • Docker, CUPP, GDB, GCCgo-go, Golang, Smtp-User-Enum,"
+    echo -e "  • IPMItool, MVP, JQ, Xfreerdp3 ,Zipalign,"
+    echo -e "  • TTYRec, ZIP, RAR, MDBtools\033[0m"
 
     echo -e "\033[1;34m\n[+] Additional applications:\033[0m"
     echo -e "\033[1;36m  • Sonic Visualiser, Google Chrome, LibreOffice, Obsidian\033[0m"
 
     echo -e "\033[1;34m\n[+] Go tools:\033[0m"
-    echo -e "\033[1;36m  • Subfinder, gau, waybackurls, katana\033[0m"
+    echo -e "\033[1;36m  • Subfinder, Gau, Waybackurls, Katana\033[0m"
 
     echo -e "\033[1;34m\n[+] Python/Ruby/NPM tools:\033[0m"
-    echo -e "\033[1;36m  • Slowloris, StegoVeritas, lolcat, git-dumper, cewler"
-    echo -e "  • haiti-hash, fpm, js-beautify\033[0m"
+    echo -e "\033[1;36m  • Slowloris, StegoVeritas, LOLcat, Git-Dumper, Cewler"
+    echo -e "  • Haiti-Hash, FPM, JS-Beautify\033[0m"
 
-    echo -e "\n\033[1;33mThis script will install approximately 63 security and productivity tools.\033[0m"
+    echo -e "\n\033[1;33mThis script will install approximately 80 security and productivity tools.\033[0m"
     echo -e "\033[1;33mThe installation may take some time depending on your internet connection.\033[0m"
     
     read -p $'\033[1;35m[?] Do you want to continue with the installation? [y/N]: \033[0m' -n 1 -r
@@ -320,60 +326,72 @@ main_installation() {
 
     # List of APT packages
     apt_packages=(
-        "npm|npm"
+        "NPM|npm"
         "MongoDB|mongodb"
         "Putty|putty"
-        "kpcli|kpcli"
+        "KPcli|kpcli"
         "Nitrogen|nitrogen"
         "Shutter|shutter"
         "Synaptic|synaptic"
-        "xclip|xclip"
-        "arandr|arandr"
+        "Xclip|xclip"
+        "Arandr|arandr"
         "Timeshift|timeshift"
         "Poppler-utils|poppler-utils"
         "Stegseek|stegseek"
-        "ltrace|ltrace"
-        "strace|strace"
-        "ntpdate|ntpdate"
-        "rlwrap|rlwrap"
-        "ipcalc|ipcalc"
-        "cargo|cargo"
-        "snapd|snapd"
+        "Ltrace|ltrace"
+        "Strace|strace"
+        "RLWrap|rlwrap"
+        "IPcalc|ipcalc"
+        "Cargo|cargo"
+        "Snapd|snapd"
         "Alien|alien"
-        "AWS CLI|awscli"
-        "Mosquitto|mosquitto mosquitto-clients"
-        "knockd|knockd"
-        "dsniff|dsniff"
-        "nuclei|nuclei"
+        "AWScli|awscli"
+        "Mosquitto|mosquitto"
+        "Mosquitto Client|mosquitto-clients"
+        "Knockd|knockd"
+        "DSniff|dsniff"
+        "Nuclei|nuclei"
         "ZAP Proxy|zaproxy"
         "Docker|docker.io"
+        "Docker-Compose|docker-compose"
         "Feroxbuster|feroxbuster"
-        "httpx-toolkit|httpx-toolkit"
+        "Httpx-Toolkit|httpx-toolkit"
         "Gobuster|gobuster"
         "Ncat|ncat"
         "Bettercap|bettercap"
         "SecLists|seclists"
         "Assetfinder|assetfinder"
-        "SIPPTs|sippts"
+        "SIPPTS|sippts"
         "Dirsearch|dirsearch"
         "ADB|adb"
         "Foremost|foremost"
-        "Certbot|certbot python3-certbot-apache"
-        "enum4linux-ng|enum4linux-ng"
+        "Certbot|certbot"
+        "Certbot Apache|certbot python3-certbot-apache"
+        "Enum4Linux-NG|enum4linux-ng"
         "Tor|tor torbrowser-launcher"
         "Ghidra|ghidra"
         "CrackMapExec|crackmapexec"
         "Padbuster|padbuster"
         "InfluxDB Client|influxdb-client"
-        "libnet-ident-perl|libnet-ident-perl"
         "Erlang|erlang"
         "HTTPie|httpie"
         "LFTP|lftp"
-        "Docker Compose|docker-compose"
         "CUPP|cupp"
         "GDB|gdb"
-        "gccgo-go|gccgo-go"
-        "golang-go|golang-go"
+        "GCCgo-go|gccgo-go"
+        "Golang|golang-go"
+        "Smtp-User-Enum|smtp-user-enum"
+        "Vagrant|vagrant"
+        "IPMItool|ipmitool"
+        "MPV|mpv"
+        "JQ|jq"
+        "Xfreerdp3|freerdp3-dev"
+        "Steghide|steghide"
+        "Zipalign|zipalign"
+        "TTYRec|ttyrec"
+        "ZIP|p7zip-full"
+        "RAR|rar"
+        "MDBtools|mdbtools"
     )
 
     # Update package list first
@@ -503,7 +521,7 @@ main_installation() {
     sleep 1
 
     # Install golang via apt
-    echo -e "\033[1;36m[*] Installing golang via apt...\033[0m"
+    echo -e "\033[1;36m[*] Installing Golang via apt...\033[0m"
     apt install -y golang >/dev/null 2>&1 && echo -e "\033[1;32m[✓] golang successfully installed!\033[0m" || echo -e "\033[1;31m[✗] Error installing golang\033[0m"
     sleep 1
 
@@ -538,8 +556,8 @@ main_installation() {
 
     go_tools=(
         "Subfinder|github.com/projectdiscovery/subfinder/v2/cmd/subfinder|subfinder"
-        "gau|github.com/lc/gau/v2/cmd/gau|gau"
-        "waybackurls|github.com/tomnomnom/waybackurls|waybackurls"
+        "Gau|github.com/lc/gau/v2/cmd/gau|gau"
+        "Waybackurls|github.com/tomnomnom/waybackurls|waybackurls"
         "Katana|github.com/projectdiscovery/katana/cmd/katana|katana"
     )
 
@@ -569,9 +587,9 @@ main_installation() {
     python_tools=(
         "Slowloris|slowloris"
         "StegoVeritas|stegoveritas"
-        "lolcat|lolcat"
-        "git-dumper|git-dumper"
-        "cewler|cewler"
+        "LOLcat|lolcat"
+        "Git-Dumper|git-dumper"
+        "Cewler|cewler"
     )
 
     for tool in "${python_tools[@]}"; do
@@ -626,65 +644,75 @@ main_installation() {
 
     failed=0
     tools_to_verify=(
-        "npm|npm"
-        "MongoDB|mongo|mongod"
+        "NPM|npm"
+        "MongoDB|mongo"
         "Putty|putty"
-        "kpcli|kpcli"
+        "KPcli|kpcli"
         "Nitrogen|nitrogen"
         "Shutter|shutter"
-        "xclip|xclip"
-        "stegseek|stegseek"
-        "ltrace|ltrace"
-        "strace|strace"
-        "AWS CLI|aws|awscli"
-        "nuclei|nuclei"
+        "Xclip|xclip"
+        "Stegseek|stegseek"
+        "Ltrace|ltrace"
+        "Strace|strace"
+        "AWSCLI|aws|awscli"
+        "Nuclei|nuclei"
         "Docker|docker"
+        "Docker-Compose|docker-compose"
         "Feroxbuster|feroxbuster"
-        "subfinder|subfinder"
-        "gau|gau"
-        "waybackurls|waybackurls"
-        "katana|katana"
-        "slowloris|slowloris"
+        "Subfinder|subfinder"
+        "Gau|gau"
+        "Waybackurls|waybackurls"
+        "Katana|katana"
+        "Slowloris|slowloris"
         "StegoVeritas|stegoveritas"
-        "lolcat|lolcat"
-        "haiti-hash|haiti"
-        "git-dumper|git-dumper"
-        "ntpdate|ntpdate"
-        "rlwrap|rlwrap"
-        "ipcalc|ipcalc"
-        "cargo|cargo"
-        "snapd|snap"
-        "Mosquitto|mosquitto|mosquitto_pub"
+        "LOLcat|lolcat"
+        "Haiti-Hash|haiti"
+        "Git-Dumper|git-dumper"
+        "RLWrap|rlwrap"
+        "IPcalc|ipcalc"
+        "Cargo|cargo"
+        "Snapd|snap"
+        "Mosquitto|mosquitto"
+        "Mosquitto Client|mosquitto_pub"
         "Alien|alien"
         "InfluxDB|influx"
-        "knockd|knock"
-        "fpm|fpm"
-        "dsniff|dsniff|arpspoof"
+        "Knockd|knock"
+        "FPM|fpm"
+        "DSniff|dsniff|arpspoof"
         "ZAP Proxy|zaproxy|zap"
         "SecLists|seclists"
-        "dirsearch|dirsearch"
-        "ncat|ncat|nc"
+        "Sirsearch|dirsearch"
+        "Ncat|ncat|nc"
         "ADB|adb"
         "Bettercap|bettercap"
         "Foremost|foremost"
         "Certbot|certbot"
-        "enum4linux-ng|enum4linux-ng"
+        "Enum4Linux-NG|enum4linux-ng"
         "Tor|tor|torbrowser-launcher"
-        "cewler|cewler"
+        "Cewler|cewler"
         "Ghidra|ghidra"
         "Erlang|erl|erlang"
         "LFTP|lftp"
-        "Docker Compose|docker-compose|docker compose"
-        "CrackMapExec|crackmapexec|cme"
-        "js-beautify|js-beautify"
+        "CrackMapExec|crackmapexec"
+        "JS-Beautify|js-beautify"
         "Sonic Visualiser|sonic-visualiser"
         "Obsidian|obsidian"
         "Google Chrome|google-chrome"
         "LibreOffice|libreoffice"
         "CUPP|cupp"
         "GDB|gdb"
-        "gccgo-go|go"
-        "golang-go|go"
+        "GCCgo-go|go"
+        "Golang-go|go"
+        "Smtp-User-Enum|smtp-user-enum"
+        "Vagrant|vagrant"
+        "IPMItool|ipmitool"
+        "Freerdp3-dev|xfreerdp3"
+        "Steghide|steghide"
+        "Zipalign|zipalign"
+        "TTYRec|ttyrec"
+        "ZIP|p7zip"
+        "RAR|rar"
+        "MDBtools|mdb-schema"
     )
 
     for tool in "${tools_to_verify[@]}"; do
@@ -764,12 +792,14 @@ github_tools=(
     "magescan|https://github.com/steverobbins/magescan.git"
     "firepwd|https://github.com/lclevy/firepwd.git"
     "Argus|https://github.com/jasonxtn/Argus"
-    "wrapwrap|https://github.com/ambionics/wrapwrap"
-    "ten|https://github.com/cfreal/ten.git"
     "nuclei-templates|https://github.com/coffinxp/nuclei-templates"
     "KnockIt|https://github.com/eliemoutran/KnockIt.git"
-    "evil-cups|https://github.com/IppSec/evil-cups.git"
-    "PwnKit|https://github.com/ly4k/PwnKit.git"
+    "track-ip|https://github.com/htr-tech/track-ip"
+    "geo-recon|https://github.com/radioactivetobi/geo-recon.git"
+    "SSTImap|https://github.com/vladko312/SSTImap.git"
+    "bypass-403|https://github.com/iamj0ker/bypass-403"
+    "ADpeas|https://github.com/61106960/adPEAS.git"
+    "Certypy|https://github.com/ly4k/Certipy.git"
 )
 
 # Improved repository cloning function
@@ -823,7 +853,7 @@ github_installation() {
     show_github_summary
     
     # Ask for confirmation
-    echo -e "\n\033[1;33mThis script will install approximately 33 security and productivity tools.\033[0m"
+    echo -e "\n\033[1;33mThis script will install approximately 30 security and productivity tools.\033[0m"
     echo -e "\033[1;33mThe installation may take some time depending on your internet connection.\033[0m"
     
     read -p $'\033[1;35m[?] Do you want to continue with the installation? [y/N]: \033[0m' -n 1 -r
@@ -990,13 +1020,15 @@ github_installation() {
         "magescan|/opt/magescan"
         "firepwd|/opt/firepwd"
         "Argus|/opt/Argus"
-        "wrapwrap|/opt/wrapwrap"
-        "ten|/opt/ten"
         "nuclei-templates|/opt/nuclei-templates"
         "KnockIt|/opt/KnockIt"
-        "evil-cups|/opt/evil-cups"
-        "PwnKit|/opt/PwnKit"
         "PEDA|$HOME/.gdbinit"
+        "track-ip|/opt/track-ip"
+        "geo-recon|/opt/geo-recon"
+        "SSTImap|/opt/SSTImap"
+        "bypass-403|/opt/bypass-403"
+	    "ADpeas|/opt/adPEAS"
+	    "Certypy|/opt/Certipy"
     )
 
     for tool in "${tools_to_verify[@]}"; do
