@@ -8,9 +8,8 @@
 🏛️ es una herramienta que automatiza:
 
 #### ⭐ Actualizacion completa del sistema + Limpieza Automatica
-#### ⭐ Correciones de Errores del sistema
-#### ⭐ Optimizar Diccionarios de la SecLists quitando los comentarios
-#### ⭐ Descargar +140 herramientas de Pentesting en APT/GitHub/Personales
+#### ⭐ Correciones de Errores del sistema + Repositorios de Kali Linux
+#### ⭐ Descargar +200 herramientas de Pentesting en APT/GitHub/Personales
 #### ⭐ Descargar de manera Automatizada un Entorno Profesional Hacking
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
