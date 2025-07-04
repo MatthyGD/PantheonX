@@ -9,7 +9,7 @@
 
 #### ⭐ Actualizacion completa del sistema + Limpieza Automatica
 #### ⭐ Correciones de Errores del sistema + Repositorios de Kali Linux
-#### ⭐ Descargar +200 herramientas de Pentesting en APT/GitHub/Personales
+#### ⭐ Descargar +200 herramientas de Pentesting & Aplicativos en APT/GitHub/Personales
 #### ⭐ Descargar de manera Automatizada un Entorno Profesional Hacking
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
