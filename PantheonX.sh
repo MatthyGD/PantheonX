@@ -183,17 +183,38 @@ check_internet_connection
 # ======================================================
 echo -e "\033[1;35m[🔍] Fixing system errors for successful installation:\033[0m"
 
-# Python Error
+# Python pip configuration error fix
+echo -e "\033[1;36m[*] Fixing Python pip configuration to prevent package installation issues...\033[0m"
 mkdir -p ~/.config/pip
-echo -e "[global]\nindex-url = https://pypi.org/simple\ntrusted-host = pypi.org\nbreak-system-packages = true" > ~/.config/pip/pip.conf
+if echo -e "[global]\nindex-url = https://pypi.org/simple\ntrusted-host = pypi.org\nbreak-system-packages = true" > ~/.config/pip/pip.conf; then
+    echo -e "\033[1;32m[✓] Python pip configuration fixed successfully!\033[0m"
+else
+    echo -e "\033[1;31m[✗] Error fixing Python pip configuration\033[0m"
+fi
+sleep 1
 
-# GPG Pub Kali Error
-wget https://archive.kali.org/archive-keyring.gpg -O /usr/share/keyrings/kali-archive-keyring.gpg &>/dev/null
+# Kali Linux GPG keyring error fix
+echo -e "\033[1;36m[*] Fixing Kali Linux GPG keyring to resolve repository authentication issues...\033[0m"
+if wget https://archive.kali.org/archive-keyring.gpg -O /usr/share/keyrings/kali-archive-keyring.gpg &>/dev/null; then
+    echo -e "\033[1;32m[✓] Kali GPG keyring fixed successfully!\033[0m"
+else
+    echo -e "\033[1;31m[✗] Error fixing Kali GPG keyring\033[0m"
+fi
+sleep 1
+
+# PostgreSQL configuration error fix
+echo -e "\033[1;36m[*] Fixing PostgreSQL configuration to set correct locale (es_ES.utf8) and ensure service stability...\033[0m"
+if sudo systemctl stop postgresql@17-main &>/dev/null && sudo pg_dropcluster 17 main &>/dev/null && sudo pg_createcluster --locale=es_ES.utf8 17 main --start &>/dev/null; then
+    echo -e "\033[1;32m[✓] PostgreSQL configuration fixed successfully!\033[0m"
+else
+    echo -e "\033[1;31m[✗] Error fixing PostgreSQL configuration\033[0m"
+fi
+sleep 1
 
 # Realistic pause for config changes
 sleep 3  
 
-echo -e "\033[1;32m[✔] Errors fixed!\033[0m\n"
+echo -e "\033[1;32m[✔] All system errors fixed!\033[0m\n"
 sleep 1
 
 # ======================================================
@@ -1394,12 +1415,13 @@ sleep 2
 echo -e "\n\033[1;33mThis will install BSPWM window manager.\033[0m"
 echo -e "\033[1;33mThe system will automatically reboot after installation.\033[0m"
 echo -e "\033[1;33mEstimated time: 3-5 minutes depending on your internet connection.\033[0m"
+echo -e "\033[1;33If you choose to install the BSPWN environment your system will automatically reboot once the environment is installed, just wait for it to finish the installation.\033[0m"
 
 read -p $'\033[1;35m[?] Continue with BSPWM installation? [y/N]: \033[0m' -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo -e "\033[1;31m[✗] BSPWM installation skipped.\033[0m"
-    return 0
+    exit 0
 fi
 
 echo -e "\033[1;32m[✔] Starting BSPWM installation process...\033[0m"
@@ -1414,11 +1436,8 @@ sudo -u "$current_user" bash <<EOF
 echo -e "\033[1;36m[↓] Downloading BSPWM configuration package...\033[0m"
 cd /tmp && git clone -q https://github.com/r1vs3c/auto-bspwm.git > /dev/null 2>&1
 
-echo -e "\033[1;36m[⚙] Configuring packages (neofetch → fastfetch replacement)...\033[0m"
-cd auto-bspwm
-sed -i 's/neofetch/fastfetch/g' setup.sh
-
 echo -e "\033[1;36m[🛠] Installing BSPWM components...\033[0m"
+cd auto-bspwm
 chmod +x setup.sh && ./setup.sh --silent > /dev/null 2>&1
 EOF
 
