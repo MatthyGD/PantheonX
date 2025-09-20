@@ -270,7 +270,7 @@ show_installation_summary() {
     echo -e "  • Padbuster, InfluxDB Client, Erlang, HTTPie, LFTP,"
     echo -e "  • Docker, CUPP, GDB, GCCgo-go, Golang, Smtp-User-Enum,"
     echo -e "  • IPMItool, MVP, JQ, Xfreerdp3 ,Zipalign,"
-    echo -e "  • TTYRec, ZIP, RAR, MDBtools, Airgeddon\033[0m"
+    echo -e "  • TTYRec, ZIP, RAR, MDBtools, Airgeddon, ExploitDB\033[0m"
 
     echo -e "\033[1;34m\n[+] Additional applications:\033[0m"
     echo -e "\033[1;36m  • Sonic Visualiser, Google Chrome, LibreOffice, Obsidian\033[0m"
@@ -393,6 +393,7 @@ main_installation() {
         "RAR|rar"
         "MDBtools|mdbtools"
         "Airgeddon|airgeddon"
+        "ExploitDB|exploitdb"
     )
 
     # Update package list first
@@ -715,6 +716,7 @@ main_installation() {
         "RAR|rar"
         "MDBtools|mdb-schema"
         "Airgeddon|airgeddon"
+        "ExploitDB|exploitdb"
     )
 
     for tool in "${tools_to_verify[@]}"; do
