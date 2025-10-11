@@ -282,10 +282,11 @@ show_installation_summary() {
     echo -e "  • Padbuster, InfluxDB Client, Erlang, HTTPie, LFTP,"
     echo -e "  • Docker, CUPP, GDB, GCCgo-go, Golang, Smtp-User-Enum,"
     echo -e "  • IPMItool, MVP, JQ, Xfreerdp3 ,Zipalign,"
-    echo -e "  • TTYRec, ZIP, RAR, MDBtools, Airgeddon, ExploitDB\033[0m"
+    echo -e "  • TTYRec, ZIP, RAR, MDBtools, Airgeddon, ExploitDB"
+    echo -e "  • BloodyAD\033[0m"
 
     echo -e "\033[1;34m\n[+] Additional applications:\033[0m"
-    echo -e "\033[1;36m  • Sonic Visualiser, Google Chrome, LibreOffice, Obsidian\033[0m"
+    echo -e "\033[1;36m  • Sonic Visualiser, LibreOffice, Obsidian\033[0m"
 
     echo -e "\033[1;34m\n[+] Go tools:\033[0m"
     echo -e "\033[1;36m  • Subfinder, Gau, Waybackurls, Katana\033[0m"
@@ -406,6 +407,7 @@ main_installation() {
         "MDBtools|mdbtools"
         "Airgeddon|airgeddon"
         "ExploitDB|exploitdb"
+        "BloodyAD|bloodyad"
     )
 
     # Update package list first
@@ -447,30 +449,6 @@ main_installation() {
         fi
     else
         echo -e "\033[1;33m[!] Sonic Visualiser already installed\033[0m"
-    fi
-    sleep 1
-
-    # === INSTALL GOOGLE CHROME ===
-    echo -e "\n\033[1;34m[+] Installing Google Chrome...\033[0m"
-    sleep 1
-
-    CHROME_DEB="/tmp/google-chrome.deb"
-    if ! command -v google-chrome &>/dev/null; then
-        echo -e "\033[1;36m[*] Downloading Google Chrome...\033[0m"
-        if wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O "$CHROME_DEB"; then
-            echo -e "\033[1;36m[*] Installing Google Chrome...\033[0m"
-            if apt install -y "$CHROME_DEB" >/dev/null 2>&1; then
-                echo -e "\033[1;32m[✓] Google Chrome successfully installed!\033[0m"
-                rm -f "$CHROME_DEB"
-                echo -e "\033[1;32m[✓] Debian package removed\033[0m"
-            else
-                echo -e "\033[1;31m[✗] Error installing Google Chrome\033[0m"
-            fi
-        else
-            echo -e "\033[1;31m[✗] Failed to download Google Chrome\033[0m"
-        fi
-    else
-        echo -e "\033[1;33m[!] Google Chrome already installed\033[0m"
     fi
     sleep 1
 
@@ -711,7 +689,6 @@ main_installation() {
         "JS-Beautify|js-beautify"
         "Sonic Visualiser|sonic-visualiser"
         "Obsidian|obsidian"
-        "Google Chrome|google-chrome"
         "LibreOffice|libreoffice"
         "CUPP|cupp"
         "GDB|gdb"
