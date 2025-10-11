@@ -202,15 +202,6 @@ else
 fi
 sleep 1
 
-# PostgreSQL configuration error fix
-echo -e "\033[1;36m[*] Fixing PostgreSQL configuration to set correct locale (es_ES.utf8) and ensure service stability...\033[0m"
-if sudo systemctl stop postgresql@17-main &>/dev/null && sudo pg_dropcluster 17 main &>/dev/null && sudo pg_createcluster --locale=es_ES.utf8 17 main --start &>/dev/null; then
-    echo -e "\033[1;32m[✓] PostgreSQL configuration fixed successfully!\033[0m"
-else
-    echo -e "\033[1;31m[✗] Error fixing PostgreSQL configuration\033[0m"
-fi
-sleep 1
-
 # Realistic pause for config changes
 sleep 3  
 
