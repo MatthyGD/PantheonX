@@ -293,7 +293,7 @@ show_installation_summary() {
 
     echo -e "\033[1;34m\n[+] Python/Ruby/NPM tools:\033[0m"
     echo -e "\033[1;36m  • Slowloris, StegoVeritas, LOLcat, Git-Dumper, Cewler"
-    echo -e "  • Haiti-Hash, FPM, JS-Beautify\033[0m"
+    echo -e "  • Haiti-Hash, FPM, JS-Beautify, ZSTeg\033[0m"
 
     echo -e "\n\033[1;33mThis script will install approximately 80 security and productivity tools.\033[0m"
     echo -e "\033[1;33mThe installation may take some time depending on your internet connection.\033[0m"
@@ -602,7 +602,7 @@ main_installation() {
 
     # Install Ruby gems
     echo -e "\n\033[1;36m[*] Installing Ruby gems...\033[0m"
-    for gem in haiti-hash fpm; do
+    for gem in haiti-hash fpm zsteg; do
         if gem list -i $gem &>/dev/null; then
             echo -e "\033[1;33m[!] $gem already installed\033[0m"
         else
@@ -706,6 +706,7 @@ main_installation() {
         "MDBtools|mdb-schema"
         "Airgeddon|airgeddon"
         "ExploitDB|exploitdb"
+        "ZSTeg|zsteg"
     )
 
     for tool in "${tools_to_verify[@]}"; do
